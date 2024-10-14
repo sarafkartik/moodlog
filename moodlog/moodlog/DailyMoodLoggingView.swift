@@ -13,6 +13,8 @@ struct DailyMoodLoggingView: View {
         ("😐", "Neutral"),
         ("😃", "Excited")
     ]
+    
+    private let wordLimit = 100
 
     var body: some View {
         NavigationView {
@@ -39,20 +41,28 @@ struct DailyMoodLoggingView: View {
                             // Mood Title
                             Text(mood.title)
                                 .font(.caption)
-                                .foregroundColor(.black)
+                                .foregroundColor(.gray)
                         }
                     }
                 }
 
                 // Reflection Text Field with "X" clear icon, disabled if no mood is selected
                 HStack {
-                    TextField("Why do you feel this way?", text: $reflectionNote)
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-                        .disabled(selectedMood.isEmpty) // Disabled if no mood is selected
-                        .frame(height: 40)
-                        .lineLimit(1) // Limit reflection note to one line
+                    TextField("Why do you feel this way?", text: Binding(
+                        get: { reflectionNote },
+                        set: {
+                            let wordCount = $0.split { $0.isWhitespace }.count
+                            if wordCount <= wordLimit {
+                                reflectionNote = $0
+                            }
+                        }
+                    ))
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(10)
+                    .disabled(selectedMood.isEmpty) // Disabled if no mood is selected
+                    .frame(height: 40)
+                    .lineLimit(1) // Limit reflection note to one line
                     
                     // X Icon to clear reflection note, only visible if reflection note is not empty
                     if !reflectionNote.isEmpty {
@@ -66,6 +76,11 @@ struct DailyMoodLoggingView: View {
                     }
                 }
                 .opacity(selectedMood.isEmpty ? 0.5 : 1) // Visual cue for disabled text field
+
+                // Word Count Display
+                Text("\(reflectionNote.split { $0.isWhitespace }.count) / \(wordLimit) words")
+                    .font(.caption)
+                    .foregroundColor(reflectionNote.split { $0.isWhitespace }.count > wordLimit ? .red : .gray)
 
                 // Submit Button
                 Button(action: {
