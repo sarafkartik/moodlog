@@ -5,26 +5,20 @@ struct DailyMoodLoggingView: View {
     @State private var reflectionNote: String = ""
     
     // Define the moods with titles
-    let moods: [(emoji: String, title: String)] = [
-        ("😊", "Happy"),
-        ("😔", "Sad"),
-        ("😡", "Angry"),
-        ("😰", "Anxious"),
-        ("😐", "Neutral"),
-        ("😃", "Excited")
-    ]
+    let moods = Constants.moods
     
-    private let wordLimit = 100
-
+    private let characterLimit = Constants.Thresholds.reflectionNoteMaximumLemgth
+    
     var body: some View {
+        
         NavigationView {
-            VStack(spacing: 20) {
+            VStack(spacing: Constants.Dimensions.standardSpacing) {
                 // Title
                 Text("How are you feeling today?")
                     .font(.largeTitle)
                     .fontWeight(.semibold)
                     .padding()
-
+                
                 // Mood Icons Grid with titles below
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 20) {
                     ForEach(moods, id: \.emoji) { mood in
@@ -33,7 +27,7 @@ struct DailyMoodLoggingView: View {
                                 .font(.system(size: 50))
                                 .padding()
                                 .background(self.selectedMood == mood.title ? Color.blue.opacity(0.3) : Color.gray.opacity(0.1))
-                                .cornerRadius(10)
+                                .cornerRadius(Constants.Dimensions.standardCornerRadius)
                                 .onTapGesture {
                                     self.selectedMood = mood.title
                                 }
@@ -45,21 +39,21 @@ struct DailyMoodLoggingView: View {
                         }
                     }
                 }
-
+                
                 // Reflection Text Field with "X" clear icon, disabled if no mood is selected
                 HStack {
                     TextField("Why do you feel this way?", text: Binding(
                         get: { reflectionNote },
                         set: {
                             let wordCount = $0.split { $0.isWhitespace }.count
-                            if wordCount <= wordLimit {
+                            if wordCount <= characterLimit {
                                 reflectionNote = $0
                             }
                         }
                     ))
                     .padding()
                     .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
+                    .cornerRadius(Constants.Dimensions.standardCornerRadius)
                     .disabled(selectedMood.isEmpty) // Disabled if no mood is selected
                     .frame(height: 40)
                     .lineLimit(1) // Limit reflection note to one line
@@ -76,12 +70,12 @@ struct DailyMoodLoggingView: View {
                     }
                 }
                 .opacity(selectedMood.isEmpty ? 0.5 : 1) // Visual cue for disabled text field
-
+                
                 // Word Count Display
-                Text("\(reflectionNote.split { $0.isWhitespace }.count) / \(wordLimit) words")
+                Text("\(reflectionNote.split { $0.isWhitespace }.count) / \(characterLimit)")
                     .font(.caption)
-                    .foregroundColor(reflectionNote.split { $0.isWhitespace }.count > wordLimit ? .red : .gray)
-
+                    .foregroundColor(reflectionNote.split { $0.isWhitespace }.count > characterLimit ? .red : .gray).frame(maxWidth: .infinity, alignment: .trailing)
+                
                 // Submit Button
                 Button(action: {
                     saveMoodLog()
@@ -92,11 +86,11 @@ struct DailyMoodLoggingView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.blue)
-                        .cornerRadius(10)
+                        .cornerRadius(Constants.Dimensions.standardCornerRadius)
                 }
-                .padding(.top, 20)
+                .padding(.top, 5)
                 .disabled(selectedMood.isEmpty) // Disabled if no mood is selected
-
+                
                 // Reset Button (Disabled if no mood selected)
                 Button(action: {
                     resetMoodSelection()
@@ -107,18 +101,24 @@ struct DailyMoodLoggingView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(selectedMood.isEmpty ? Color.gray : Color.red) // Gray if disabled
-                        .cornerRadius(10)
+                        .cornerRadius(Constants.Dimensions.standardCornerRadius)
                 }
-                .padding(.top, 10)
                 .disabled(selectedMood.isEmpty) // Disabled if no mood is selected
-
+                
                 Spacer()
             }
             .padding()
-            .navigationBarTitle("Mood Log", displayMode: .inline)
+            .navigationBarTitleDisplayMode(.inline) // Hide default title
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Hello")  // Custom title
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading) // Align to left
+                }
+            }
         }
     }
-
+    
     // Function to handle mood logging
     func saveMoodLog() {
         // Check if reflection note is empty and assign mood title if so
@@ -128,7 +128,7 @@ struct DailyMoodLoggingView: View {
         print("Mood: \(selectedMood), Reflection: \(finalReflectionNote)")
         // Add CoreData saving logic here later
     }
-
+    
     // Function to reset the mood selection and reflection note
     func resetMoodSelection() {
         selectedMood = ""
