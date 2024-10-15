@@ -13,7 +13,7 @@ struct moodlogApp: App {
 
     var body: some Scene {
         WindowGroup {
-            DailyMoodLoggingView()
+            ContentView()
         }
     }
 }
