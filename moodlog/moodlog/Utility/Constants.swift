@@ -4,14 +4,16 @@
 //
 //  Created by Kartik Saraf on 15/10/24.
 //
+
+import CoreFoundation
 struct Constants {
-    static let moods : [(emoji: String, title: String)] = [
-        ("😊", "Happy"),
-        ("😔", "Sad"),
-        ("😡", "Angry"),
-        ("😰", "Anxious"),
-        ("😐", "Neutral"),
-        ("😃", "Excited")
+    static let moods: [(emoji: String, title: String)] = [
+        ("\u{1F60A}", "Happy"),  // 😊
+        ("\u{1F614}", "Sad"),    // 😔
+        ("\u{1F621}", "Angry"),  // 😡
+        ("\u{1F630}", "Anxious"), // 😰
+        ("\u{1F610}", "Neutral"), // 😐
+        ("\u{1F603}", "Excited")  // 😃
     ]
     struct Strings{
         static let appName:String = "moodlog🗒️"
@@ -34,8 +36,8 @@ struct Constants {
         
     }
     struct Dimensions{
-        static let standardSpacing = 20.0
-        static let standardCornerRadius = 10.0
+        static let standardSpacing = CGFloat(20)
+        static let standardCornerRadius = CGFloat(10)
     }
     
     struct Thresholds{

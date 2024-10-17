@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  moodlog
-//
-//  Created by Kartik Saraf on 14/10/24.
-//
-
 import SwiftUI
 import CoreData
 
@@ -13,17 +6,26 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            if userName != nil {
-                DailyMoodLoggingView(userName: userName ?? "") // If the name is saved, show MoodLogView
-            } else {
-                NameInputView{name in
-                    userName = name
-                } // If no name is saved, show NameInputView
+            Group {
+                if let name = userName {
+                    DailyMoodLoggingView(userName: name) // Use optional binding here
+                } else {
+                    NameInputView { name in
+                        userName = name
+                    } // Show NameInputView if no name is saved
+                }
             }
+            .navigationBarHidden(true) // Optionally hide the navigation bar if not needed
         }
-        .onAppear() {
+        .onAppear {
             // Check if the user name exists in UserDefaults
             userName = UserDefaults.standard.string(forKey: Constants.Keys.userName)
         }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
     }
 }

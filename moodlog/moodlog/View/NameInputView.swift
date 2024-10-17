@@ -1,11 +1,3 @@
-//
-//  NameInputView.swift
-//  moodlog
-//
-//  Created by Kartik Saraf on 15/10/24.
-//
-
-
 import SwiftUI
 
 struct NameInputView: View {
@@ -14,34 +6,30 @@ struct NameInputView: View {
     var onSave: (String) -> Void
     
     var body: some View {
-        
-        VStack(spacing: Constants.Dimensions.standardSpacing) {
+        VStack(spacing: 20) {
             // Title
             Text(Constants.Strings.nameInputViewHeading)
                 .font(.largeTitle)
                 .fontWeight(.semibold)
-                .padding().frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             // TextField for Name/Alias input with character limit
-            TextField(Constants.Strings.nameInputViewTextHint, text: Binding(
-                get: { self.userName },
-                set: { newValue in
-                    print("New value entered: \(newValue)")
-                    if newValue.count <= characterLimit {
-                        self.userName = newValue
-                        print("Username updated to:\(userName)")
+            TextField(Constants.Strings.nameInputViewTextHint, text: $userName)
+                .onChange(of: userName, { oldValue, newValue in
+                    if newValue.count >= characterLimit {
+                        self.userName = String(newValue.prefix(characterLimit))
                     }
-                }
-            ))
-            .padding()
-            .background(Color.gray.opacity(0.1))
-            .cornerRadius(Constants.Dimensions.standardCornerRadius)
-            
+                })
+                .padding()
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(Constants.Dimensions.standardCornerRadius)
             
             // Character Count Display (Optional)
             Text("\(userName.count) / \(characterLimit)")
                 .font(.caption)
-                .foregroundColor(userName.count > characterLimit ? .red : .gray).frame(maxWidth: .infinity, alignment: .trailing)
+                .foregroundColor(userName.count > characterLimit ? .red : .gray)
+                .frame(maxWidth: .infinity, alignment: .trailing)
             
             // Submit Button
             Button(action: {
@@ -53,7 +41,7 @@ struct NameInputView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(isValidName() ? Color.blue : Color.gray)
-                    .cornerRadius(Constants.Dimensions.standardCornerRadius)
+                    .cornerRadius(20)
             }
             .disabled(!isValidName()) // Disable if name is invalid
             
@@ -61,17 +49,11 @@ struct NameInputView: View {
         }
         .padding()
         .navigationBarTitle(Constants.Strings.appName, displayMode: .inline)
-        
     }
     
-    // Calculate the number of words in the user's name
-    func characterCounter() -> Int {
-        return userName.count
-    }
-    
-    // Check if the name is valid (not empty, <= word limit, and <= character limit)
+    // Check if the name is valid (not empty and <= character limit)
     func isValidName() -> Bool {
-        return !userName.isEmpty && characterCounter() <= characterLimit
+        return !userName.isEmpty && userName.count <= characterLimit
     }
     
     // Save the user's name or alias
@@ -79,7 +61,6 @@ struct NameInputView: View {
         UserDefaults.standard.set(userName, forKey: Constants.Keys.userName)
         onSave(userName)
         print("User name saved: \(userName)")
-        // Implement storage logic here, e.g., save to UserDefaults or CoreData
     }
 }
 

@@ -10,13 +10,16 @@ struct DailyMoodLoggingView: View {
     private let characterLimit = Constants.Thresholds.reflectionNoteMaximumLemgth
     
     var body: some View {
-        VStack(spacing: Constants.Dimensions.standardSpacing) {
+        VStack(spacing: 20) {
+            Text("\(Constants.Strings.helloText) \(userName)")
+                .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
             // Title
             Text(Constants.Strings.moodLogPageTitle)
                 .font(.title)
                 .fontWeight(.semibold)
-                .padding(.top, 10) // Adjust top padding to reduce gap
-                .padding(.bottom, 10) // Adjust bottom padding to reduce gap
+                .padding(.top, 10)
+                .padding(.bottom, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             // Mood Icons Grid with titles below
@@ -27,7 +30,7 @@ struct DailyMoodLoggingView: View {
                             .font(.system(size: 50))
                             .padding()
                             .background(self.selectedMood == mood.title ? Color.blue.opacity(0.3) : Color.gray.opacity(0.1))
-                            .cornerRadius(Constants.Dimensions.standardCornerRadius)
+                            .cornerRadius(10)
                             .onTapGesture {
                                 self.selectedMood = mood.title
                             }
@@ -40,25 +43,29 @@ struct DailyMoodLoggingView: View {
                 }
             }
             
-            // Reflection Text Field with "X" clear icon, disabled if no mood is selected
+            // Reflection Text Field with "X" clear icon
             HStack {
                 TextField(Constants.Strings.moodLogPageReflectionNoteHint, text: Binding(
                     get: { reflectionNote },
                     set: {
-                        let charcterCount = $0.count
-                        if charcterCount <= characterLimit {
+                        if $0.count <= characterLimit {
                             reflectionNote = $0
                         }
                     }
                 ))
+                .onChange(of: reflectionNote, { oldValue, newValue in
+                    if newValue.count >= characterLimit {
+                        self.reflectionNote = String(newValue.prefix(characterLimit))
+                    }
+                })
                 .padding()
                 .background(Color.gray.opacity(0.1))
-                .cornerRadius(Constants.Dimensions.standardCornerRadius)
-                .disabled(selectedMood.isEmpty) // Disabled if no mood is selected
+                .cornerRadius(10)
+                .disabled(selectedMood.isEmpty)
                 .frame(height: 40)
-                .lineLimit(1) // Limit reflection note to one line
+                .lineLimit(1)
                 
-                // X Icon to clear reflection note, only visible if reflection note is not empty
+                // X Icon to clear reflection note
                 if !reflectionNote.isEmpty {
                     Button(action: {
                         reflectionNote = ""
@@ -69,12 +76,12 @@ struct DailyMoodLoggingView: View {
                     }
                 }
             }
-            .opacity(selectedMood.isEmpty ? 0.5 : 1) // Visual cue for disabled text field
+            .opacity(selectedMood.isEmpty ? 0.5 : 1)
             
             // Word Count Display
             Text("\(reflectionNote.split { $0.isWhitespace }.count) / \(characterLimit)")
                 .font(.caption)
-                .foregroundColor(reflectionNote.split { $0.isWhitespace }.count > characterLimit ? .red : .gray)
+                .foregroundColor(reflectionNote.count > characterLimit ? .red : .gray)
                 .frame(maxWidth: .infinity, alignment: .trailing)
             
             // Submit Button
@@ -87,12 +94,12 @@ struct DailyMoodLoggingView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color.blue)
-                    .cornerRadius(Constants.Dimensions.standardCornerRadius)
+                    .cornerRadius(10)
             }
             .padding(.top, 5)
-            .disabled(selectedMood.isEmpty) // Disabled if no mood is selected
+            .disabled(selectedMood.isEmpty)
             
-            // Reset Button (Disabled if no mood selected)
+            // Reset Button
             Button(action: {
                 resetMoodSelection()
             }) {
@@ -101,28 +108,18 @@ struct DailyMoodLoggingView: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(selectedMood.isEmpty ? Color.gray : Color.red) // Gray if disabled
-                    .cornerRadius(Constants.Dimensions.standardCornerRadius)
+                    .background(selectedMood.isEmpty ? Color.gray : Color.red)
+                    .cornerRadius(10)
             }
-            .disabled(selectedMood.isEmpty) // Disabled if no mood is selected
+            .disabled(selectedMood.isEmpty)
             
             Spacer()
         }
         .padding()
-        .navigationBarTitleDisplayMode(.inline) // Hide default title
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("\(Constants.Strings.helloText) \(userName)")  // Custom title
-                    .font(.headline)
-                    .frame(maxWidth: .infinity, alignment: .leading) // Align to left
-            }
-        }
     }
-    
     
     // Function to handle mood logging
     func saveMoodLog() {
-        // Check if reflection note is empty and assign mood title if so
         let moodTitle = moods.first { $0.title == selectedMood }?.title ?? "Unknown Mood"
         let finalReflectionNote = reflectionNote.isEmpty ? moodTitle : reflectionNote
         
