@@ -35,16 +35,7 @@ struct Constants {
     struct Emojis{
         
     }
-    struct Dimensions{
-        static let standardSpacing = CGFloat(20)
-        static let standardCornerRadius = CGFloat(10)
-    }
     
-    struct Thresholds{
-        static let nameInputViewMaximumLength:Int = 10
-        static let reflectionNoteMaximumLemgth:Int = 100
-
-    }
     struct Keys{
         static let userName:String = "userName"
     }

@@ -23,7 +23,7 @@ struct NameInputView: View {
                 })
                 .padding()
                 .background(Color.gray.opacity(0.1))
-                .cornerRadius(Constants.Dimensions.standardCornerRadius)
+                .cornerRadius(10)
             
             // Character Count Display (Optional)
             Text("\(userName.count) / \(characterLimit)")
