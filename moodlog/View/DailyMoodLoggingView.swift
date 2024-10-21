@@ -7,7 +7,7 @@ struct DailyMoodLoggingView: View {
     
     // Define the moods with titles
     let moods = Constants.moods
-    private let characterLimit = Constants.Thresholds.reflectionNoteMaximumLemgth
+    private let characterLimit = 100
     
     var body: some View {
         VStack(spacing: 20) {
