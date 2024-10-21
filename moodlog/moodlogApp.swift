@@ -8,12 +8,25 @@
 import SwiftUI
 
 @main
-struct moodlogApp: App {
-    let persistenceController = PersistenceController.shared
+struct MoodLogApp: App {
+    @State private var isActive = false
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if isActive {
+                ContentView() // Your main app view
+            } else {
+                SplashScreenView()
+                    .onAppear {
+                        // Simulate a delay for the splash screen
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            withAnimation {
+                                isActive = true
+                            }
+                        }
+                    }
+            }
         }
     }
 }
+
