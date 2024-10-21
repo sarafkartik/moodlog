@@ -4,115 +4,107 @@ struct DailyMoodLoggingView: View {
     var userName: String = ""
     @State private var selectedMood: String = ""
     @State private var reflectionNote: String = ""
+    @FocusState private var isTextFieldFocused: Bool
     
-    // Define the moods with titles
     let moods = Constants.moods
     private let characterLimit = 50
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text("\(Constants.Strings.helloText) \(userName)")
-                .font(.headline)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            // Title
-            Text(Constants.Strings.moodLogPageTitle)
-                .font(.title)
-                .fontWeight(.semibold)
-                .padding(.top, 10)
-                .padding(.bottom, 10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            // Mood Icons Grid with titles below
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 20) {
-                ForEach(moods, id: \.emoji) { mood in
-                    VStack {
-                        Text(mood.emoji)
-                            .font(.system(size: 50))
-                            .padding()
-                            .background(self.selectedMood == mood.title ? Color.blue.opacity(0.3) : Color.gray.opacity(0.1))
-                            .cornerRadius(10)
-                            .onTapGesture {
-                                self.selectedMood = mood.title
-                            }
-                        
-                        // Mood Title
-                        Text(mood.title)
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
-            
-            // Reflection Text Field with "X" clear icon
-            HStack {
-                TextField(Constants.Strings.moodLogPageReflectionNoteHint, text: Binding(get: {
-                    reflectionNote
-                }, set: {
-                    reflectionNote = $0
-                }))
-                .padding()
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(10)
-                .disabled(selectedMood.isEmpty)
-                .frame(height: 40)
-                .lineLimit(1)
+        ScrollView {
+            VStack(spacing: 20) {
+                Text("\(Constants.Strings.helloText) \(userName)")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
-                // X Icon to clear reflection note
-                if !reflectionNote.isEmpty {
-                    Button(action: {
-                        reflectionNote = ""
-                    }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.gray)
-                            .padding(.trailing, 10)
+                Text(Constants.Strings.moodLogPageTitle)
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .padding(.top, 10)
+                    .padding(.bottom, 10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 20) {
+                    ForEach(moods, id: \.emoji) { mood in
+                        VStack {
+                            Text(mood.emoji)
+                                .font(.system(size: 50))
+                                .padding()
+                                .background(self.selectedMood == mood.title ? Color.blue.opacity(0.3) : Color.gray.opacity(0.1))
+                                .cornerRadius(10)
+                                .onTapGesture {
+                                    self.selectedMood = mood.title
+                                }
+                            
+                            Text(mood.title)
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
                     }
                 }
+                
+                HStack {
+                    TextField(Constants.Strings.moodLogPageReflectionNoteHint, text: $reflectionNote)
+                        .focused($isTextFieldFocused)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(10)
+                        .disabled(selectedMood.isEmpty)
+                        .frame(height: 40)
+                        .lineLimit(1)
+                    
+                    if !reflectionNote.isEmpty {
+                        Button(action: {
+                            reflectionNote = ""
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.gray)
+                                .padding(.trailing, 10)
+                        }
+                    }
+                }
+                .opacity(selectedMood.isEmpty ? 0.5 : 1)
+                
+                Text("\(reflectionNote.count) / \(characterLimit)")
+                    .font(.caption)
+                    .foregroundColor(reflectionNote.count > characterLimit ? .red : .gray)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                
+                Button(action: {
+                    isTextFieldFocused = false
+                    saveMoodLog()
+                }) {
+                    Text(Constants.Strings.submitButtonText)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(getBackgroundColor())
+                        .cornerRadius(10)
+                }
+                .padding(.top, 5)
+                .disabled(selectedMood.isEmpty || reflectionNote.count > characterLimit)
+                
+                Button(action: {
+                    resetMoodSelection()
+                    isTextFieldFocused = false
+                }) {
+                    Text(Constants.Strings.resetButtonText)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(selectedMood.isEmpty ? Color.gray : Color.red)
+                        .cornerRadius(10)
+                }
+                .disabled(selectedMood.isEmpty)
+                
+                Spacer()
             }
-            .opacity(selectedMood.isEmpty ? 0.5 : 1)
+            .padding()
             
-            // Word Count Display
-            Text("\(reflectionNote.count) / \(characterLimit)")
-                .font(.caption)
-                .foregroundColor(reflectionNote.count > characterLimit ? .red : .gray)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-            
-            // Submit Button
-            Button(action: {
-                saveMoodLog()
-            }) {
-                Text(Constants.Strings.submitButtonText)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(self.getBackgroundColor())
-                    .cornerRadius(10)
-            }
-            .padding(.top, 5)
-            .disabled(selectedMood.isEmpty || reflectionNote.count > characterLimit)
-            
-            // Reset Button
-            Button(action: {
-                resetMoodSelection()
-            }) {
-                Text(Constants.Strings.resetButtonText)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(selectedMood.isEmpty ? Color.gray : Color.red)
-                    .cornerRadius(10)
-            }
-            .disabled(selectedMood.isEmpty)
-            
-            Spacer()
         }
-        .padding()
     }
     
-    
-    
-    // Function to handle mood logging
     func saveMoodLog() {
         let moodTitle = moods.first { $0.title == selectedMood }?.title ?? "Unknown Mood"
         let finalReflectionNote = reflectionNote.isEmpty ? moodTitle : reflectionNote
@@ -121,7 +113,6 @@ struct DailyMoodLoggingView: View {
         // Add CoreData saving logic here later
     }
     
-    // Function to reset the mood selection and reflection note
     func resetMoodSelection() {
         selectedMood = ""
         reflectionNote = ""
