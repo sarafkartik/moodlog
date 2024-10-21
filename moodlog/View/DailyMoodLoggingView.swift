@@ -30,7 +30,7 @@ struct DailyMoodLoggingView: View {
                                 Text(mood.emoji)
                                     .font(.system(size: 50))
                                     .padding()
-                                    .background(self.selectedMood == mood.title ? Color.blue.opacity(0.3) : Color.gray.opacity(0.1))
+                                    .background(self.selectedMood == mood.title ? Constants.Colors.palePink : Color.gray.opacity(0.1))
                                     .cornerRadius(10)
                                     .onTapGesture {
                                         self.selectedMood = mood.title
@@ -95,7 +95,7 @@ struct DailyMoodLoggingView: View {
                             .foregroundColor(.white)
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(selectedMood.isEmpty ? Color.gray : Color.red)
+                            .background(selectedMood.isEmpty ? Constants.Colors.softGray : Constants.Colors.softRed)
                             .cornerRadius(10)
                     }
                     .disabled(selectedMood.isEmpty)
@@ -108,9 +108,11 @@ struct DailyMoodLoggingView: View {
                 }
             }
         }
-//        .sheet(isPresented: $showSuccessView) { // Present success view
-//            Text("Yay")
-//        }
+        .sheet(isPresented: $showSuccessView) { // Present success view
+            SuccessView {
+                showSuccessView = false
+            }
+        }
     }
     
     func saveMoodLog() {
@@ -126,7 +128,7 @@ struct DailyMoodLoggingView: View {
     }
     
     func getBackgroundColor() -> Color {
-        return selectedMood.isEmpty || reflectionNote.count > characterLimit ? Color.gray : Color.blue
+        return selectedMood.isEmpty || reflectionNote.count > characterLimit ? Constants.Colors.softGray : Constants.Colors.softGreen
     }
 }
 

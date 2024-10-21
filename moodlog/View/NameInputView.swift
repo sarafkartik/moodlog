@@ -39,8 +39,8 @@ struct NameInputView: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(isValidName() ? Color.blue : Color.gray)
-                    .cornerRadius(20)
+                    .background(isValidName() ? Constants.Colors.softBlue : Constants.Colors.softGray)
+                    .cornerRadius(10)
             }
             .disabled(!isValidName()) // Disable if name is invalid
             
