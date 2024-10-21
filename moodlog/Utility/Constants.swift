@@ -6,6 +6,7 @@
 //
 
 import CoreFoundation
+import SwiftUICore
 struct Constants {
     static let moods: [(emoji: String, title: String)] = [
         ("\u{1F60A}", "Happy"),  // 😊
@@ -25,6 +26,7 @@ struct Constants {
         static let nameInputViewTextHint:String = "Enter your name or alias"
         static let moodLogPageTitle:String = "How are you feeling today?"
         static let moodLogPageReflectionNoteHint:String = "Why do you feel this way?"
+        static let unknownMood:String = "Unknown"
     }
     struct Colors{
         
@@ -34,6 +36,9 @@ struct Constants {
     }
     struct Emojis{
         
+    }
+    struct Images{
+        static let xMark:Image = Image(systemName: "xmark.circle.fill")
     }
     
     struct Keys{

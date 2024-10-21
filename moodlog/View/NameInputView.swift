@@ -15,15 +15,14 @@ struct NameInputView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             // TextField for Name/Alias input with character limit
-            TextField(Constants.Strings.nameInputViewTextHint, text: $userName)
-                .onChange(of: userName, { oldValue, newValue in
-                    if newValue.count >= characterLimit {
-                        self.userName = String(newValue.prefix(characterLimit))
-                    }
-                })
-                .padding()
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(10)
+            TextField(Constants.Strings.nameInputViewTextHint, text: Binding(get: {
+                userName
+            }, set: { 
+                userName = $0
+            }))
+            .padding()
+            .background(Color.gray.opacity(0.1))
+            .cornerRadius(10)
             
             // Character Count Display (Optional)
             Text("\(userName.count) / \(characterLimit)")
