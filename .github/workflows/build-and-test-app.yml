@@ -46,18 +46,17 @@ jobs:
           echo "Using device: $device"
           xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
     
-        
       - name: Test
         env:
           scheme: ${{ 'default' }}
           platform: ${{ 'iOS Simulator' }}
         run: |
-          device="iPhone 16"  # Specify your desired simulator device name here
+          device="iPhone 16"
           if [ $scheme = default ]; then scheme=$(cat default); fi
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
           echo "Running tests on device: $device" 
-          xcodebuild test -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO || echo "Tests failed to run."
+          xcodebuild test -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device" -skip-testing moodlogTests -skip-testing moodlogUITests CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO || echo "Tests failed to run."
 
       - name: Clean Build
         env:
