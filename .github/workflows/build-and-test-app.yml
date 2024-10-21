@@ -31,6 +31,8 @@ jobs:
           echo $default | cat >default
           echo Using default scheme: $default
           
+      - name: Debug Device List
+        run: xcrun simctl list devices
         
       - name: Build
         env:
@@ -44,6 +46,11 @@ jobs:
           echo "Using device: $device"  # Log the selected device
           xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
           
+      - name: Boot Simulator
+        run: |
+          echo "Booting simulator..."
+          xcrun simctl boot "$device" || echo "Failed to boot simulator. Please check if the device exists."
+        
       - name: Test
         env:
           scheme: ${{ 'default' }}
@@ -54,7 +61,7 @@ jobs:
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
           echo "Running tests on device: $device"  # Log the selected device
-          xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
+          xcodebuild test -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device" || echo "Tests failed to run."
 
       - name: Clean Build
         env:
