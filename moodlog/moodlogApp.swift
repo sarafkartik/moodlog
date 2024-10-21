@@ -14,7 +14,7 @@ struct MoodLogApp: App {
     var body: some Scene {
         WindowGroup {
             if isActive {
-                ContentView() // Your main app view
+                ContentView()
             } else {
                 SplashScreenView()
                     .onAppear {

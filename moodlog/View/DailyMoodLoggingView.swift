@@ -7,7 +7,7 @@ struct DailyMoodLoggingView: View {
     
     // Define the moods with titles
     let moods = Constants.moods
-    private let characterLimit = 100
+    private let characterLimit = 50
     
     var body: some View {
         VStack(spacing: 20) {
@@ -45,19 +45,11 @@ struct DailyMoodLoggingView: View {
             
             // Reflection Text Field with "X" clear icon
             HStack {
-                TextField(Constants.Strings.moodLogPageReflectionNoteHint, text: Binding(
-                    get: { reflectionNote },
-                    set: {
-                        if $0.count <= characterLimit {
-                            reflectionNote = $0
-                        }
-                    }
-                ))
-                .onChange(of: reflectionNote, { oldValue, newValue in
-                    if newValue.count >= characterLimit {
-                        self.reflectionNote = String(newValue.prefix(characterLimit))
-                    }
-                })
+                TextField(Constants.Strings.moodLogPageReflectionNoteHint, text: Binding(get: {
+                    reflectionNote
+                }, set: {
+                    reflectionNote = $0
+                }))
                 .padding()
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(10)
@@ -79,7 +71,7 @@ struct DailyMoodLoggingView: View {
             .opacity(selectedMood.isEmpty ? 0.5 : 1)
             
             // Word Count Display
-            Text("\(reflectionNote.split { $0.isWhitespace }.count) / \(characterLimit)")
+            Text("\(reflectionNote.count) / \(characterLimit)")
                 .font(.caption)
                 .foregroundColor(reflectionNote.count > characterLimit ? .red : .gray)
                 .frame(maxWidth: .infinity, alignment: .trailing)
@@ -93,11 +85,11 @@ struct DailyMoodLoggingView: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.blue)
+                    .background(self.getBackgroundColor())
                     .cornerRadius(10)
             }
             .padding(.top, 5)
-            .disabled(selectedMood.isEmpty)
+            .disabled(selectedMood.isEmpty || reflectionNote.count > characterLimit)
             
             // Reset Button
             Button(action: {
@@ -118,6 +110,8 @@ struct DailyMoodLoggingView: View {
         .padding()
     }
     
+    
+    
     // Function to handle mood logging
     func saveMoodLog() {
         let moodTitle = moods.first { $0.title == selectedMood }?.title ?? "Unknown Mood"
@@ -131,6 +125,10 @@ struct DailyMoodLoggingView: View {
     func resetMoodSelection() {
         selectedMood = ""
         reflectionNote = ""
+    }
+    
+    func getBackgroundColor() -> Color {
+        return selectedMood.isEmpty || reflectionNote.count > characterLimit ? Color.gray : Color.blue
     }
 }
 
