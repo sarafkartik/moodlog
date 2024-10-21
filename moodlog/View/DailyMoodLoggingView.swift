@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct DailyMoodLoggingView: View {
+    @EnvironmentObject var moodManager: MoodManager
     var userName: String = ""
     @State private var selectedMood: String = ""
     @State private var reflectionNote: String = ""
@@ -118,7 +119,8 @@ struct DailyMoodLoggingView: View {
     func saveMoodLog() {
         let moodTitle = moods.first { $0.title == selectedMood }?.title ?? "Unknown Mood"
         let finalReflectionNote = reflectionNote.isEmpty ? moodTitle : reflectionNote
-        print("Mood: \(selectedMood), Reflection: \(finalReflectionNote)")
+        moodManager.saveMood(username: userName, mood: moodTitle, note: finalReflectionNote)
+        //print("Mood: \(selectedMood), Reflection: \(finalReflectionNote)")
         resetMoodSelection()
     }
     

@@ -10,11 +10,12 @@ import SwiftUI
 @main
 struct MoodLogApp: App {
     @State private var isActive = false
+    @StateObject private var moodManager = MoodManager()
 
     var body: some Scene {
         WindowGroup {
             if isActive {
-                ContentView()
+                ContentView().environmentObject(moodManager)
             } else {
                 SplashScreenView()
                     .onAppear {
