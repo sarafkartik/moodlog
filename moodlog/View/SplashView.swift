@@ -15,7 +15,7 @@ struct SplashScreenView: View {
                 Text(Constants.Strings.appName)
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .padding()
+                    .padding(EdgeInsets(top: 100, leading: 100, bottom: 200, trailing: 100))
             }
         }
     }
