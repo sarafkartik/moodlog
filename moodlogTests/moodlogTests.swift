@@ -10,8 +10,17 @@ import Testing
 
 struct moodlogTests {
 
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
-    }
+    @Test func testIntegerAddition() throws {
+           // Given
+           let a = 3
+           let b = 5
+           
+           // When
+           let result = a + b
+           let expected = 8
+           
+           // Then
+        #expect(Bool(result == expected))
+       }
 
 }
