@@ -16,6 +16,8 @@ struct Constants {
         ("\u{1F610}", "Neutral"), // 😐
         ("\u{1F603}", "Excited")  // 😃
     ]
+    static let moodStrings = ["Happy", "Sad", "Angry","Anxious","Neutral", "Excited"]
+    
     struct Strings{
         static let appName:String = "moodlog🗒️"
         static let helloText:String = "Hello"
@@ -29,7 +31,12 @@ struct Constants {
         static let moodLogPageReflectionNoteHint:String = "Why do you feel this way?"
         static let unknownMood:String = "Unknown"
         static let success:String = "Success!"
-        static let moodSavedMessage:String = "🗒️ Your mood has been logged successfully."
+        static let moodSavedMessage:String = "🗒️ Mood logged successfully."
+        //Menu Items
+        static let moodHistory:String = "Mood History"
+        static let moodPrediction:String = "Mood Prediction"
+        static let cleanSlate:String = "Clean Slate!"
+        static let moodTrendsLast7Days = "Mood Trends from the Last 7 Days"
     }
     struct Colors{
         
@@ -37,7 +44,12 @@ struct Constants {
         static let teal = Color(red: 102 / 255, green: 178 / 255, blue: 178 / 255)
         static let lavender = Color(red: 179 / 255, green: 157 / 255, blue: 217 / 255)
         static let palePink = Color(red: 242 / 255, green: 182 / 255, blue: 193 / 255)
-        
+        static let softLavender = Color(red: 210 / 255, green: 182 / 255, blue: 255 / 255)
+        static let mutedPeach = Color(red: 255 / 255, green: 204 / 255, blue: 179 / 255)
+        static let powderBlue = Color(red: 176 / 255, green: 224 / 255, blue: 230 / 255)
+        static let softMint = Color(red: 184 / 255, green: 255 / 255, blue: 192 / 255)
+        static let paleYellow = Color(red: 255 / 255, green: 255 / 255, blue: 0 / 255)
+        static let lightCoral = Color(red: 255 / 255, green: 160 / 255, blue: 122 / 255)
         static let softGreen = Color(red: 129 / 255, green: 199 / 255, blue: 132 / 255)
         static let softRed = Color(red: 239 / 255, green: 83 / 255, blue: 80 / 255)
         static let softGray = Color(red: 189 / 255, green: 189 / 255, blue: 189 / 255)
@@ -53,6 +65,7 @@ struct Constants {
     }
     struct Images{
         static let xMark:Image = Image(systemName: "xmark.circle.fill")
+        static let hamburger:Image =  Image(systemName: "line.horizontal.3")
     }
     
     struct Keys{

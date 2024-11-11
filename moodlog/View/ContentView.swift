@@ -8,7 +8,9 @@ struct ContentView: View {
         NavigationView {
             Group {
                 if let name = userName {
-                    DailyMoodLoggingView(userName: name) // Use optional binding here
+                    DailyMoodLoggingView(userName: name, onCleanSlate: {
+                        userName = nil
+                    }) // Use optional binding here
                 } else {
                     NameInputView { name in
                         userName = name
