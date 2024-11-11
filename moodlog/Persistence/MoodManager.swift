@@ -72,6 +72,42 @@ class MoodManager: ObservableObject {
         }
     }
     
+    // Fetch mood history for a user
+    func getMoodHistory(for username: String) -> [MoodHistory] {
+        let request: NSFetchRequest<MoodEntry> = MoodEntry.fetchRequest()
+        request.predicate = NSPredicate(format: "userName == %@", username)
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \MoodEntry.logDate, ascending: false)]
+        
+        do {
+            let entries = try context.fetch(request)
+            return entries.map { MoodHistory(recordID:UUID(), id: $0.objectID, date: $0.logDate ?? Date(), mood: $0.currentMood ?? "---", reflection: $0.reflectionNote ?? "---") }
+        } catch {
+            print("Error fetching mood entries: \(error.localizedDescription)")
+            return []
+        }
+    }
+    
+    func getMockMoodHistory() -> [MoodHistory] {
+        // Sample NSManagedObjectID for the sake of mock data. In a real scenario, this would be fetched from CoreData
+        let mockObjectID = NSManagedObjectID()
+        
+        // Creating mock data for MoodHistory
+        let moodHistory = [
+            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date(), mood: "Happy", reflection: "Feeling great today!"),
+            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-86400), mood: "Sad", reflection: "Not a good day..."),
+            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-172800), mood: "Angry", reflection: "Very frustrated with work."),
+            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-259200), mood: "Excited", reflection: "Looking forward to the weekend!"),
+            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-345600), mood: "Neutral", reflection: "Nothing special today."),
+            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-432000), mood: "Anxious", reflection: "A bit anxious about the upcoming presentation."),
+            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-518400), mood: "Excited", reflection: "Excited to see family tomorrow."),
+            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-604800), mood: "Neutral", reflection: "Feeling indifferent."),
+            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-691200), mood: "Sad", reflection: "Woke up feeling down."),
+            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-777600), mood: "Happy", reflection: "Had a great workout today!")
+        ]
+        
+        return moodHistory
+    }
+    
     // Fetch the mood entry for a specific user and date
     private func fetchMoodEntry(for username: String, on date: Date) -> MoodEntry? {
         let request: NSFetchRequest<MoodEntry> = MoodEntry.fetchRequest()
@@ -88,6 +124,21 @@ class MoodManager: ObservableObject {
         } catch {
             print("Error fetching mood entry: \(error.localizedDescription)")
             return nil
+        }
+    }
+    
+    func clearAllForUser(username: String) throws {
+        let request: NSFetchRequest<MoodEntry> = MoodEntry.fetchRequest()
+        request.predicate = NSPredicate(format: "userName == %@", username)
+        
+        do {
+            let entries = try context.fetch(request)
+            if(entries.isEmpty){
+                return
+            }
+            for entry in entries {
+                context.delete(entry)
+            }
         }
     }
 }
