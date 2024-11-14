@@ -31,7 +31,7 @@ struct DailyMoodLoggingView: View {
                             .font(.title3).bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    ScrollView {
+                    ScrollView(showsIndicators: false) {
                         VStack(spacing: 20) {
                             Text(Constants.Strings.moodLogPageTitle)
                                 .font(.title)
@@ -211,6 +211,15 @@ struct DrawerView: View {
                     .font(.title2).bold()
                     .foregroundColor(.white)
                     .padding(EdgeInsets(top:5,leading: 10, bottom: 0, trailing: 0))
+                    .onDisappear(perform: {
+                        isDrawerOpen = false
+                    })
+            }
+            NavigationLink(destination: MoodAnalysisView(userName: userName)) {
+                Text(Constants.Strings.moodAnalysis)
+                    .font(.title2).bold()
+                    .foregroundColor(.white)
+                    .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 0))
                     .onDisappear(perform: {
                         isDrawerOpen = false
                     })
