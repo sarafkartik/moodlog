@@ -108,6 +108,54 @@ class MoodManager: ObservableObject {
         return moodHistory
     }
     
+    func calculateMoodFrequencies(forDays days: Int, userName: String) -> [String: Double] {
+        //let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date())!
+        let moodLogs = getMockMoodHistory()
+        //let moodLogs = getMoodHistory(for: userName)
+        //let filteredLogs = moodLogs.filter { $0.date >= cutoffDate }
+        let filteredLogs = moodLogs
+        let moodCount = Dictionary(grouping: filteredLogs, by: { $0.mood })
+            .mapValues { Double($0.count) }
+        let totalLogs = Double(filteredLogs.count)
+        return moodCount.mapValues { count in
+            totalLogs > 0 ? (count / totalLogs) * 100 : 0.0
+        }
+    }
+    
+    func generateMoodInsights(forDays days: Int,userName: String) -> [String] {
+        let moodFrequencies = calculateMoodFrequencies(forDays: days,userName: userName)
+        
+        // Find most and least frequent moods
+        guard let mostFrequentMood = moodFrequencies.max(by: {
+            if $0.value == $1.value {
+                return $0.key < $1.key // Alphabetical order as a tie-breaker
+            }
+            return $0.value < $1.value
+        }) else { return [] }
+
+        guard let leastFrequentMood = moodFrequencies.min(by: {
+            if $0.value == $1.value {
+                return $0.key < $1.key // Alphabetical order as a tie-breaker
+            }
+            return $0.value < $1.value
+        }) else { return [] }
+        // Check mood stability by looking at distribution
+        let stabilityThreshold = 60.0
+        let predominantMood = moodFrequencies.filter { $0.value >= stabilityThreshold }.first
+        var result = [String]()
+        result.append("\(mostFrequentMood.key)")
+        result.append("\(leastFrequentMood.key)")
+        
+        if let stableMood = predominantMood {
+            result.append("\(Constants.Strings.moodStabilityMessagePrefix)\(stableMood.key)\(Constants.Strings.moodStabilityMessageSuffix)")
+        } else {
+            result.append(Constants.Strings.moodFlexibilityMessage)
+        }
+        
+        return result
+    }
+
+    
     // Fetch the mood entry for a specific user and date
     private func fetchMoodEntry(for username: String, on date: Date) -> MoodEntry? {
         let request: NSFetchRequest<MoodEntry> = MoodEntry.fetchRequest()

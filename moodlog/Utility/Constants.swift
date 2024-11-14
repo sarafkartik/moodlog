@@ -39,6 +39,18 @@ struct Constants {
         static let cleanSlate:String = "Clean Slate!"
         static let moodTrendsLast7Days = "Mood Trends from the Last 7 Days"
         static let noMoodsLoggedYet:String = "No moods logged yet..."
+        static let moodFrequencyAnalysis:String = "Mood Analysis"
+        static let moodFrequencyAnalysisLable:String = "Mood Frequency Analysis"
+        static let moodInsights:String = "Mood Insights:\n"
+        static let leastPrevalentMood:String = "Least Prevalent Mood"
+        static let mostPrevalentMood:String = "Most Prevalent Mood"
+        static let moodFlexibilityMessage:String = "There’s a good variation in your moods, indicating emotional felxibility.\n"
+        static let moodStabilityMessagePrefix:String = "You've mostly felt "
+        static let moodStabilityMessageSuffix:String = ", showing mood stability.\n"
+        static let resultLabel:String = "Result"
+        
+
+        
     }
     struct Colors{
         
