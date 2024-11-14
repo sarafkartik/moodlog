@@ -215,6 +215,10 @@ struct DrawerView: View {
                         isDrawerOpen = false
                     })
             }
+            Text(Constants.Strings.moodAnalysis)
+                .font(.title2).bold()
+                .foregroundColor(.white)
+                .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 0))
             Text(Constants.Strings.moodPrediction)
                 .font(.title2).bold()
                 .foregroundColor(.white)

@@ -40,25 +40,37 @@ struct MoodHistoryView: View {
                 }
             }.padding()
             MoodComparisonChart(moodHistory: filteredMoodHistory)
-            List(filteredMoodHistory, id: \.recordID) { mood in
-                HStack {
-                    Text(mood.getEmoji(mood: mood.mood))
-                        .font(.system(size: 50)).padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
-                    VStack(alignment: .leading) {
-                        Text(mood.mood)
-                            .font(.headline)
-                            .padding(.top, 2)
-                        Text(mood.reflection)
-                            .font(.body)
-                            .foregroundColor(.gray)
-                            .lineLimit(2)
-                        Text(formatter.string(from: mood.date))  // Formatted date
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
+            
+            Group{
+                if(moodHistory.isEmpty){
                     Spacer()
+                    Text(Constants.Strings.noMoodsLoggedYet)
+                        .font(.subheadline).bold()
+                        .frame(alignment: .bottom)
+                    Spacer()
+                    
+                } else{
+                    List(moodHistory, id: \.recordID) { mood in
+                        HStack {
+                            Text(mood.getEmoji(mood: mood.mood))
+                                .font(.system(size: 50)).padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
+                            VStack(alignment: .leading) {
+                                Text(mood.mood)
+                                    .font(.headline)
+                                    .padding(.top, 2)
+                                Text(mood.reflection)
+                                    .font(.body)
+                                    .foregroundColor(.gray)
+                                    .lineLimit(2)
+                                Text(formatter.string(from: mood.date))  // Formatted date
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                            Spacer()
+                        }
+                        .padding(.vertical, 5)
+                    }
                 }
-                .padding(.vertical, 5)
             }
             .onAppear {
                 loadMoodHistory()
@@ -134,7 +146,7 @@ struct MoodComparisonChart: View {
 
 struct MoodHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        MoodHistoryView(userName: "Kartik").environmentObject(MoodManager())
+        MoodHistoryView(userName: "Rex").environmentObject(MoodManager())
     }
 }
 

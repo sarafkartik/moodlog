@@ -35,8 +35,10 @@ struct Constants {
         //Menu Items
         static let moodHistory:String = "Mood History"
         static let moodPrediction:String = "Mood Prediction"
+        static let moodAnalysis:String = "Mood Analysis"
         static let cleanSlate:String = "Clean Slate!"
         static let moodTrendsLast7Days = "Mood Trends from the Last 7 Days"
+        static let noMoodsLoggedYet:String = "No moods logged yet..."
     }
     struct Colors{
         
