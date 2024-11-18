@@ -47,7 +47,7 @@ struct Constants {
         static let moodFlexibilityMessage:String = "There’s a good variation in your moods, indicating emotional felxibility.\n"
         static let moodStabilityMessagePrefix:String = "You've mostly felt "
         static let moodStabilityMessageSuffix:String = ", showing mood stability.\n"
-        static let resultLabel:String = "Result"
+        static let resultLabel:String = "*Cumulative Snetiment Analysis"
         
 
         
