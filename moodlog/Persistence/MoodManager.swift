@@ -88,22 +88,41 @@ class MoodManager: ObservableObject {
     }
     
     func getMockMoodHistory() -> [MoodHistory] {
-        // Sample NSManagedObjectID for the sake of mock data. In a real scenario, this would be fetched from CoreData
         let mockObjectID = NSManagedObjectID()
-        
         // Creating mock data for MoodHistory
-        let moodHistory = [
-            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date(), mood: "Happy", reflection: "Feeling great today!"),
-            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-86400), mood: "Sad", reflection: "Not a good day..."),
-            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-172800), mood: "Angry", reflection: "Very frustrated with work."),
-            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-259200), mood: "Excited", reflection: "Looking forward to the weekend!"),
-            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-345600), mood: "Neutral", reflection: "Nothing special today."),
-            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-432000), mood: "Anxious", reflection: "A bit anxious about the upcoming presentation."),
-            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-518400), mood: "Excited", reflection: "Excited to see family tomorrow."),
-            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-604800), mood: "Neutral", reflection: "Feeling indifferent."),
-            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-691200), mood: "Sad", reflection: "Woke up feeling down."),
-            MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-777600), mood: "Happy", reflection: "Had a great workout today!")
-        ]
+        let moodHistory: [MoodHistory] = {
+            var history = [
+                MoodHistory(recordID: UUID(), id: mockObjectID, date: Date(), mood: "Happy", reflection: "Feeling great today!"),
+                MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-86400), mood: "Sad", reflection: "Not a good day..."),
+                MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-172800), mood: "Angry", reflection: "Very frustrated with work."),
+                MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-259200), mood: "Excited", reflection: "Looking forward to the weekend!"),
+                MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-345600), mood: "Neutral", reflection: "Nothing special today."),
+                MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-432000), mood: "Anxious", reflection: "A bit anxious about the upcoming presentation."),
+                MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-518400), mood: "Excited", reflection: "Excited to see family tomorrow."),
+                MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-604800), mood: "Neutral", reflection: "Feeling indifferent."),
+                MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-691200), mood: "Sad", reflection: "Woke up feeling down."),
+                MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-777600), mood: "Happy", reflection: "Had a great workout today!")
+            ]
+            
+            // Adding 50 more items
+            let moods = ["Happy", "Sad", "Angry", "Excited", "Neutral", "Anxious"]
+            let reflections = [
+                "Had a good day at work!", "Not feeling too great today.", "Frustrated with my progress.", "Looking forward to a fun night out.",
+                "Feeling a bit off today.", "I can't shake this nervous feeling.", "Excited to start a new project!", "I'm indifferent to everything today.",
+                "Woke up with a positive mindset.", "I'm feeling very happy after meeting a friend!"
+            ]
+            
+            for i in 0..<80 {
+                let randomMood = moods[i % moods.count]
+                let randomReflection = reflections[i % reflections.count]
+                let timeOffset = Double(-((i + 10) * 86400)) // Offset days
+                let moodItem = MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(timeOffset), mood: randomMood, reflection: randomReflection)
+                history.append(moodItem)
+            }
+            
+            return history
+        }()
+
         
         return moodHistory
     }
@@ -122,6 +141,15 @@ class MoodManager: ObservableObject {
         }
     }
     
+    func calculateSentimentFrequency(sentiments:[String]) -> [String: Double]{
+        let moodCount = Dictionary(grouping: sentiments, by: { $0 })
+            .mapValues { Double($0.count) }
+        let totalLogs = Double(sentiments.count)
+        return moodCount.mapValues { count in
+            totalLogs > 0 ? (count / totalLogs) * 100 : 0.0
+        }
+    }
+    
     func generateMoodInsights(forDays days: Int,userName: String) -> [String] {
         let moodFrequencies = calculateMoodFrequencies(forDays: days,userName: userName)
         
@@ -132,7 +160,7 @@ class MoodManager: ObservableObject {
             }
             return $0.value < $1.value
         }) else { return [] }
-
+        
         guard let leastFrequentMood = moodFrequencies.min(by: {
             if $0.value == $1.value {
                 return $0.key < $1.key // Alphabetical order as a tie-breaker
@@ -154,7 +182,46 @@ class MoodManager: ObservableObject {
         
         return result
     }
+    
+    func generateSentimentAnalysis(userName: String) -> String? {
+        let sentimentAnalyzer = SentimentAnalyzer()
+        //let moodHistory = getMoodHistory(for: userName)
+        let moodHistory = getMockMoodHistory()
+        var sentimentAnalysisResult:[String] = [String]()
+        if(!moodHistory.isEmpty){
+            for entry in moodHistory {
+                let sentimentAnalysis = sentimentAnalyzer.analyzeSentiment(for:entry.reflection)
+                if let sentimentAnalysis {
+                    if !sentimentAnalysis.analysedMood.isEmpty {
+                        sentimentAnalysisResult.append(sentimentAnalysis.analysedMood)
+                    }
+                }
+                
+            }
+            if !sentimentAnalysisResult.isEmpty {
+                let sentimentFrequency = calculateSentimentFrequency(sentiments: sentimentAnalysisResult)
+                
+                if let mostFrequentMood = sentimentFrequency.max(by: {
+                    if $0.value == $1.value {
+                        return $0.key < $1.key // Alphabetical order as a tie-breaker
+                    }
+                    return $0.value < $1.value
+                }) {
+                    return mostFrequentMood.key
+                } else {
+                    return nil
+                }
+            }
 
+            
+            
+            
+        }
+        
+        return nil
+    }
+    
+    
     
     // Fetch the mood entry for a specific user and date
     private func fetchMoodEntry(for username: String, on date: Date) -> MoodEntry? {

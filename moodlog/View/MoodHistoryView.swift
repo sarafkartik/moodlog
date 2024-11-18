@@ -80,8 +80,8 @@ struct MoodHistoryView: View {
     }
     
     func loadMoodHistory() {
-        //self.moodHistory = moodManager.getMockMoodHistory()
-        self.moodHistory = moodManager.getMoodHistory(for: userName)
+        self.moodHistory = moodManager.getMockMoodHistory()
+        //self.moodHistory = moodManager.getMoodHistory(for: userName)
     }
     
     // Filter mood history to include only the last 7 days

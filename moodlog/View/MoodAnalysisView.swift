@@ -100,7 +100,7 @@ struct MoodAnalysisView: View {
                                 
                                 Text(Constants.Strings.resultLabel)
                                     .font(.headline)
-                                Text(moodInsights[2])
+                                Text(self.calculateMoodInisghts())
                                     .font(.body)
                                     .multilineTextAlignment(.leading)
                                 
@@ -115,6 +115,8 @@ struct MoodAnalysisView: View {
                         
                     }
                     
+                    Text("*This app uses Artificial Intelligence for sentiment analysis, and the results may not always be accurate.").font(.callout).padding(EdgeInsets(top: -3, leading: 8, bottom: 5, trailing: 8))
+                    
                     
                     
                     Spacer()
@@ -127,6 +129,21 @@ struct MoodAnalysisView: View {
             moodInsights = moodManager.generateMoodInsights(forDays: 7, userName: userName)
         }
         .navigationBarBackButtonHidden(true)
+    }
+    
+    private func calculateMoodInisghts() -> String {
+        var moodInsights: String = "Your overall sentiment has been:"
+        let sentimentAnalysisResult = moodManager.generateSentimentAnalysis(userName:userName)
+        if (sentimentAnalysisResult != nil && !sentimentAnalysisResult!.isEmpty){
+            moodInsights += " \(sentimentAnalysisResult!)"
+        }
+        else{
+            moodInsights = "No sentiment analysis results available."
+        }
+        return moodInsights
+        
+        
+        
     }
 }
 struct MoodAnalysisView_Previews: PreviewProvider {
