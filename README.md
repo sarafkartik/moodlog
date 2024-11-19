@@ -2,8 +2,8 @@
 
 MoodLog is a SwiftUI-based app for tracking daily moods and reflections.
 
-## Features
-- **Track Moods**: Log your daily mood using emoji icons.
+## Feature Overview
+- **Track**: Log your daily mood using emoji icons.
 - **Reflect**: Add reflection notes for each mood entry.
 - **Analyse**: Use Mood Analysis to analyse mood trends and get AI-generated insights.
 - **Predict**: AI-enabled mood prediction that predicts future mood based on past trends.
@@ -20,4 +20,22 @@ MoodLog is a SwiftUI-based app for tracking daily moods and reflections.
 - SwiftUI
 - CoreData
 - CoreML
+
+## Screenshots
+
+![Simulator Screenshot - iPhone 16 - 2024-11-19 at 17 12 01](https://github.com/user-attachments/assets/1a85b0d5-3ee0-47ea-8fda-51cc2b2f1dde)
+
+![Simulator Screenshot - iPhone 16 - 2024-11-19 at 17 12 25](https://github.com/user-attachments/assets/147fa7a5-f0e6-4c42-ae92-48fa7121d8f4)
+
+![Simulator Screenshot - iPhone 16 - 2024-11-19 at 17 12 36](https://github.com/user-attachments/assets/95346cf1-0ded-4ec5-9b3a-2c2f0272c9a4)
+
+![Simulator Screenshot - iPhone 16 - 2024-11-19 at 17 12 48](https://github.com/user-attachments/assets/0ee8ab9c-d374-45fe-be8d-5e8a595728d0)
+
+![Simulator Screenshot - iPhone 16 - 2024-11-19 at 17 12 56](https://github.com/user-attachments/assets/8ffe12af-ef09-4024-8e17-ca387879da1c)
+
+![Simulator Screenshot - iPhone 16 - 2024-11-19 at 17 13 09](https://github.com/user-attachments/assets/f2497b7e-e426-4cde-8456-6709116c8427)
+
+
+
+
 
