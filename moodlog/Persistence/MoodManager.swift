@@ -104,7 +104,7 @@ class MoodManager: ObservableObject {
                 MoodHistory(recordID: UUID(), id: mockObjectID, date: Date().addingTimeInterval(-777600), mood: "Happy", reflection: "Had a great workout today!")
             ]
             
-            // Adding 50 more items
+            // Adding more items
             let moods = ["Happy", "Sad", "Angry", "Excited", "Neutral", "Anxious"]
             let reflections = [
                 "Had a good day at work!", "Not feeling too great today.", "Frustrated with my progress.", "Looking forward to a fun night out.",
