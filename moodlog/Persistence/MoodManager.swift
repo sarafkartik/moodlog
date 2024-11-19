@@ -129,8 +129,8 @@ class MoodManager: ObservableObject {
     
     func calculateMoodFrequencies(forDays days: Int, userName: String) -> [String: Double] {
         //let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date())!
-        let moodLogs = getMockMoodHistory()
-        //let moodLogs = getMoodHistory(for: userName)
+        //let moodLogs = getMockMoodHistory()
+        let moodLogs = getMoodHistory(for: userName)
         //let filteredLogs = moodLogs.filter { $0.date >= cutoffDate }
         let filteredLogs = moodLogs
         let moodCount = Dictionary(grouping: filteredLogs, by: { $0.mood })
@@ -185,8 +185,8 @@ class MoodManager: ObservableObject {
     
     func generateSentimentAnalysis(userName: String) -> String? {
         let sentimentAnalyzer = SentimentAnalyzer()
-        //let moodHistory = getMoodHistory(for: userName)
-        let moodHistory = getMockMoodHistory()
+        let moodHistory = getMoodHistory(for: userName)
+        //let moodHistory = getMockMoodHistory()
         var sentimentAnalysisResult:[String] = [String]()
         if(!moodHistory.isEmpty){
             for entry in moodHistory {
@@ -219,6 +219,11 @@ class MoodManager: ObservableObject {
         }
         
         return nil
+    }
+    
+    func generateMoodPrediction(moods:[String])->String?{
+        let moodPrediction = MoodPrediction()
+        return moodPrediction.predictMood(from: moods)
     }
     
     

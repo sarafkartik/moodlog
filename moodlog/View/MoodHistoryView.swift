@@ -39,20 +39,25 @@ struct MoodHistoryView: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }.padding()
-            MoodComparisonChart(moodHistory: filteredMoodHistory)
-            
-            Group{
-                if(moodHistory.isEmpty){
-                    Spacer()
-                    Text(Constants.Strings.noMoodsLoggedYet)
-                        .font(.subheadline).bold()
-                        .frame(alignment: .bottom)
-                    Spacer()
+            if(moodHistory.isEmpty){
+                Spacer()
+                Text(Constants.Strings.noMoodsLoggedYet)
+                    .font(.title2)
+                    .bold()
+                    .foregroundColor(Color.black.opacity(0.7))
+                    .padding()
+                Spacer()
+                
+            } else{
+                MoodComparisonChart(moodHistory: filteredMoodHistory)
+                
+                Group{
                     
-                } else{
+                    
+    
                     List(moodHistory, id: \.recordID) { mood in
                         HStack {
-                            Text(mood.getEmoji(mood: mood.mood))
+                            Text(MoodHistory.getEmoji(mood: mood.mood))
                                 .font(.system(size: 50)).padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
                             VStack(alignment: .leading) {
                                 Text(mood.mood)
@@ -72,16 +77,19 @@ struct MoodHistoryView: View {
                     }
                 }
             }
-            .onAppear {
-                loadMoodHistory()
-            }
+            
+            
+            
+        }
+        .onAppear {
+            loadMoodHistory()
         }
         .navigationBarBackButtonHidden(true)
     }
     
     func loadMoodHistory() {
-        self.moodHistory = moodManager.getMockMoodHistory()
-        //self.moodHistory = moodManager.getMoodHistory(for: userName)
+        //self.moodHistory = moodManager.getMockMoodHistory()
+        self.moodHistory = moodManager.getMoodHistory(for: userName)
     }
     
     // Filter mood history to include only the last 7 days
@@ -146,7 +154,7 @@ struct MoodComparisonChart: View {
 
 struct MoodHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        MoodHistoryView(userName: "Rex").environmentObject(MoodManager())
+        MoodHistoryView(userName: "Kartik").environmentObject(MoodManager())
     }
 }
 

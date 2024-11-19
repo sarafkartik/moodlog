@@ -16,7 +16,7 @@ struct MoodHistory: Identifiable {
     var mood: String
     var reflection: String
     
-    func getEmoji(mood: String) -> String {
+    static func getEmoji(mood: String) -> String {
         switch mood {
         case "Happy":
             return "😊"

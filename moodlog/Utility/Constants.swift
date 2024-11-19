@@ -38,9 +38,9 @@ struct Constants {
         static let moodAnalysis:String = "Mood Analysis"
         static let cleanSlate:String = "Clean Slate!"
         static let moodTrendsLast7Days = "Mood Trends from the Last 7 Days"
-        static let noMoodsLoggedYet:String = "No moods logged yet..."
+        static let noMoodsLoggedYet:String = "Log mood at least once to unlock this feature."
         static let moodFrequencyAnalysis:String = "Mood Analysis"
-        static let moodFrequencyAnalysisLable:String = "Mood Frequency Analysis"
+        static let moodFrequencyAnalysisLabel:String = "Mood Frequency Analysis"
         static let moodInsights:String = "Mood Insights:\n"
         static let leastPrevalentMood:String = "Least Prevalent Mood"
         static let mostPrevalentMood:String = "Most Prevalent Mood"
@@ -48,6 +48,13 @@ struct Constants {
         static let moodStabilityMessagePrefix:String = "You've mostly felt "
         static let moodStabilityMessageSuffix:String = ", showing mood stability.\n"
         static let resultLabel:String = "*Cumulative Snetiment Analysis"
+        static let moodPredictionLabel:String = "Mood Prediction"
+        static let moodPredictionEmptyLabel = "Log for at least 3 days to unlock this feature."
+        static let moodAnalysisEmptyLabel = "Log mood at least once to unlock this feature."
+        static let lastThreeLoggedMoods:String = "Your last 3 logged moods..."
+        static let moodPredictionForTomorrow = "*Mood Prediction for tomorrow:"
+        static let moodPredictionDisclaimer = "*This app uses Artificial Intelligence for mood prediction, and the results may not always be accurate."
+        static let sentimentAnalysisDisclaimer = "*This app uses Artificial Intelligence for sentiment analysis, and the results may not always be accurate."
         
 
         

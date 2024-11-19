@@ -34,6 +34,7 @@ struct MoodAnalysisView: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }.padding()
+            if(!moodInsights.isEmpty){
             ScrollView (showsIndicators: false){
                 VStack{
                     // Pie Chart
@@ -52,7 +53,7 @@ struct MoodAnalysisView: View {
                         .padding()
                         
                     } else {
-                        Text(Constants.Strings.moodFrequencyAnalysisLable)
+                        Text(Constants.Strings.moodFrequencyAnalysisLabel)
                             .font(.headline)
                             .foregroundColor(.gray)
                         .padding(.top, 8)         }
@@ -72,7 +73,7 @@ struct MoodAnalysisView: View {
                     Divider()
                         .padding(.vertical)
                     
-                    if(!moodInsights.isEmpty){
+                   
                         VStack(alignment: .leading, spacing: 16) {
                             Text(Constants.Strings.moodInsights)
                                 .font(.title3)
@@ -112,15 +113,26 @@ struct MoodAnalysisView: View {
                         }
                         .padding()
                         
+                        Text(Constants.Strings.sentimentAnalysisDisclaimer).font(.callout).padding(EdgeInsets(top: -3, leading: 8, bottom: 5, trailing: 8))
+                        
                         
                     }
                     
-                    Text("*This app uses Artificial Intelligence for sentiment analysis, and the results may not always be accurate.").font(.callout).padding(EdgeInsets(top: -3, leading: 8, bottom: 5, trailing: 8))
+                    
                     
                     
                     
                     Spacer()
                 }
+            }
+            else{
+                Spacer()
+                Text(Constants.Strings.moodAnalysisEmptyLabel)
+                    .font(.title2)
+                    .bold()
+                    .foregroundColor(Color.black.opacity(0.7))
+                    .padding()
+                Spacer()
             }
         }
         .padding()

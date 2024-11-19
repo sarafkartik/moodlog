@@ -32,14 +32,14 @@ struct DailyMoodLoggingView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     ScrollView(showsIndicators: false) {
+                        Text(Constants.Strings.moodLogPageTitle)
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .padding(.leading, 20)
+                            .padding(.top, 10)
+                            .padding(.bottom, 10)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         VStack(spacing: 20) {
-                            Text(Constants.Strings.moodLogPageTitle)
-                                .font(.title)
-                                .fontWeight(.semibold)
-                                .padding(.top, 10)
-                                .padding(.bottom, 10)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
                             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 20) {
                                 ForEach(moods, id: \.emoji) { mood in
                                     VStack {
@@ -137,10 +137,13 @@ struct DailyMoodLoggingView: View {
                                 isDrawerOpen = false
                             }
                         HStack{
-                            DrawerView(userName:userName, onCleanSlate: onCleanSlate,isDrawerOpen: $isDrawerOpen)
-                                .frame(width: UIScreen.main.bounds.width * 0.75, alignment: .leading)
-                                .background(Constants.Colors.lavender)
-                                .shadow(radius: 10)
+                            DrawerView(userName:userName, onCleanSlate: {
+                                resetMoodSelection()
+                                onCleanSlate()
+                            },isDrawerOpen: $isDrawerOpen)
+                            .frame(width: UIScreen.main.bounds.width * 0.75, alignment: .leading)
+                            .background(Constants.Colors.lavender)
+                            .shadow(radius: 10)
                             Spacer()
                         }
                         .transition(.move(edge: .leading))
@@ -224,10 +227,12 @@ struct DrawerView: View {
                         isDrawerOpen = false
                     })
             }
-            Text(Constants.Strings.moodPrediction)
-                .font(.title2).bold()
-                .foregroundColor(.white)
-                .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 0))
+            NavigationLink(destination: MoodPredictionView(userName: userName)) {
+                Text(Constants.Strings.moodPrediction)
+                    .font(.title2).bold()
+                    .foregroundColor(.white)
+                    .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 0))
+            }
             Button(action: {
                 removeUserNameAndData()
             }) {
