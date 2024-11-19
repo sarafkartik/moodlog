@@ -32,14 +32,14 @@ struct DailyMoodLoggingView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     ScrollView(showsIndicators: false) {
+                        Text(Constants.Strings.moodLogPageTitle)
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .padding(.leading, 20)
+                            .padding(.top, 10)
+                            .padding(.bottom, 10)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         VStack(spacing: 20) {
-                            Text(Constants.Strings.moodLogPageTitle)
-                                .font(.title)
-                                .fontWeight(.semibold)
-                                .padding(.top, 10)
-                                .padding(.bottom, 10)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
                             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 20) {
                                 ForEach(moods, id: \.emoji) { mood in
                                     VStack {
