@@ -52,7 +52,7 @@ struct MoodAnalysisView: View {
                         .padding()
                         
                     } else {
-                        Text(Constants.Strings.moodFrequencyAnalysisLable)
+                        Text(Constants.Strings.moodFrequencyAnalysisLabel)
                             .font(.headline)
                             .foregroundColor(.gray)
                         .padding(.top, 8)         }
@@ -115,7 +115,7 @@ struct MoodAnalysisView: View {
                         
                     }
                     
-                    Text("*This app uses Artificial Intelligence for sentiment analysis, and the results may not always be accurate.").font(.callout).padding(EdgeInsets(top: -3, leading: 8, bottom: 5, trailing: 8))
+                    Text(Constants.Strings.sentimentAnalysisDisclaimer).font(.callout).padding(EdgeInsets(top: -3, leading: 8, bottom: 5, trailing: 8))
                     
                     
                     

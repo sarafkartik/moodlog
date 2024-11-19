@@ -137,10 +137,13 @@ struct DailyMoodLoggingView: View {
                                 isDrawerOpen = false
                             }
                         HStack{
-                            DrawerView(userName:userName, onCleanSlate: onCleanSlate,isDrawerOpen: $isDrawerOpen)
-                                .frame(width: UIScreen.main.bounds.width * 0.75, alignment: .leading)
-                                .background(Constants.Colors.lavender)
-                                .shadow(radius: 10)
+                            DrawerView(userName:userName, onCleanSlate: {
+                                resetMoodSelection()
+                                onCleanSlate()
+                            },isDrawerOpen: $isDrawerOpen)
+                            .frame(width: UIScreen.main.bounds.width * 0.75, alignment: .leading)
+                            .background(Constants.Colors.lavender)
+                            .shadow(radius: 10)
                             Spacer()
                         }
                         .transition(.move(edge: .leading))
@@ -224,10 +227,12 @@ struct DrawerView: View {
                         isDrawerOpen = false
                     })
             }
-            Text(Constants.Strings.moodPrediction)
-                .font(.title2).bold()
-                .foregroundColor(.white)
-                .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 0))
+            NavigationLink(destination: MoodPredictionView(userName: userName)) {
+                Text(Constants.Strings.moodPrediction)
+                    .font(.title2).bold()
+                    .foregroundColor(.white)
+                    .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 0))
+            }
             Button(action: {
                 removeUserNameAndData()
             }) {

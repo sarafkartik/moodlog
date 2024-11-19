@@ -52,7 +52,7 @@ struct MoodHistoryView: View {
                 } else{
                     List(moodHistory, id: \.recordID) { mood in
                         HStack {
-                            Text(mood.getEmoji(mood: mood.mood))
+                            Text(MoodHistory.getEmoji(mood: mood.mood))
                                 .font(.system(size: 50)).padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
                             VStack(alignment: .leading) {
                                 Text(mood.mood)
@@ -80,8 +80,8 @@ struct MoodHistoryView: View {
     }
     
     func loadMoodHistory() {
-        self.moodHistory = moodManager.getMockMoodHistory()
-        //self.moodHistory = moodManager.getMoodHistory(for: userName)
+        //self.moodHistory = moodManager.getMockMoodHistory()
+        self.moodHistory = moodManager.getMoodHistory(for: userName)
     }
     
     // Filter mood history to include only the last 7 days
@@ -146,7 +146,7 @@ struct MoodComparisonChart: View {
 
 struct MoodHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        MoodHistoryView(userName: "Rex").environmentObject(MoodManager())
+        MoodHistoryView(userName: "Kartik").environmentObject(MoodManager())
     }
 }
 
