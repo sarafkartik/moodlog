@@ -39,17 +39,22 @@ struct MoodHistoryView: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }.padding()
-            MoodComparisonChart(moodHistory: filteredMoodHistory)
-            
-            Group{
-                if(moodHistory.isEmpty){
-                    Spacer()
-                    Text(Constants.Strings.noMoodsLoggedYet)
-                        .font(.subheadline).bold()
-                        .frame(alignment: .bottom)
-                    Spacer()
+            if(moodHistory.isEmpty){
+                Spacer()
+                Text(Constants.Strings.noMoodsLoggedYet)
+                    .font(.title2)
+                    .bold()
+                    .foregroundColor(Color.black.opacity(0.7))
+                    .padding()
+                Spacer()
+                
+            } else{
+                MoodComparisonChart(moodHistory: filteredMoodHistory)
+                
+                Group{
                     
-                } else{
+                    
+    
                     List(moodHistory, id: \.recordID) { mood in
                         HStack {
                             Text(MoodHistory.getEmoji(mood: mood.mood))
@@ -72,9 +77,12 @@ struct MoodHistoryView: View {
                     }
                 }
             }
-            .onAppear {
-                loadMoodHistory()
-            }
+            
+            
+            
+        }
+        .onAppear {
+            loadMoodHistory()
         }
         .navigationBarBackButtonHidden(true)
     }
