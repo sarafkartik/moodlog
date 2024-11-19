@@ -23,7 +23,7 @@ MoodLog is a SwiftUI-based app for tracking daily moods and reflections.
 
 ## Screenshots
 
-<div style="display: flex; gap: 20px;">
+<div style="display: flex; gap: 80px;">
     <img src="https://github.com/user-attachments/assets/1a85b0d5-3ee0-47ea-8fda-51cc2b2f1dde" width="130" height="280">
     <img src="https://github.com/user-attachments/assets/147fa7a5-f0e6-4c42-ae92-48fa7121d8f4" width="130" height="280">
     <img src="https://github.com/user-attachments/assets/95346cf1-0ded-4ec5-9b3a-2c2f0272c9a4" width="130" height="280">
