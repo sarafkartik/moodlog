@@ -49,12 +49,12 @@ struct MoodHistoryView: View {
                 Spacer()
                 
             } else{
-                MoodComparisonChart(moodHistory: filteredMoodHistory)
+                if(!filteredMoodHistory.isEmpty){
+                    MoodComparisonChart(moodHistory: filteredMoodHistory)
+                }
                 
                 Group{
                     
-                    
-    
                     List(moodHistory, id: \.recordID) { mood in
                         HStack {
                             Text(MoodHistory.getEmoji(mood: mood.mood))

@@ -84,7 +84,7 @@ struct MoodAnalysisView: View {
                                 HStack {
                                     Text(Constants.Strings.mostPrevalentMood)
                                         .font(.headline)
-                                    Spacer()
+                                
                                     Text(moodInsights[0])
                                         .font(.body)
                                 }
@@ -93,7 +93,7 @@ struct MoodAnalysisView: View {
                                 HStack {
                                     Text(Constants.Strings.leastPrevalentMood)
                                         .font(.headline)
-                                    Spacer()
+                                  
                                     Text(moodInsights[1])
                                         .font(.body)
                                 }
