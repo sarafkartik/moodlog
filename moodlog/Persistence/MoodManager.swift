@@ -203,7 +203,7 @@ class MoodManager: ObservableObject {
                 
                 if let mostFrequentMood = sentimentFrequency.max(by: {
                     if $0.value == $1.value {
-                        return $0.key < $1.key // Alphabetical order as a tie-breaker
+                        return $0.key < $1.key
                     }
                     return $0.value < $1.value
                 }) {
